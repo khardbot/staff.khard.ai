@@ -1,0 +1,15 @@
+# SwiftUI Animation Videos - Curated Selection
+# Critério: conteúdo focado em animações visíveis, técnicas de UI, 2024-2025
+
+NpSw849Vo3g	SwiftUI Particle Burst Animation - Dynamic Visual Effects
+mzpZNaseAIE	SwiftUI Animations - Overview Completo
+MO_mkFO5X68	SwiftUI Animations - Everything Beginners Need 2025
+O-v21p8nX1U	How to Build SwiftUI Animations & Transitions Users Love
+pt-0vhQv4Iw	Custom Tab Bar SwiftUI with Smooth Animations
+_flwprZxig8	Lottie in SwiftUI - Lightweight Animations
+d6db5m6qjew	Modern SwiftUI Tab Bar UI Custom Animated 2025
+qV5HlkyT2K8	Animations in SwiftUI + MVVM
+H8cYT3oxp-c	SwiftUI Water Reminder - Animation Magic
+VNDq1Q_W1Bs	Top 2026 App Design Trends
+axhFky0MwCI	SwiftUI Animated Gradient Text Effect
+wFEZ9_obaqo	SwiftUI Timer - Beautiful Design and Animations
