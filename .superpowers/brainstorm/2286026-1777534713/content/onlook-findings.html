@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Onlook — Descoberta Crítica</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #e8e8f0; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; }
+
+  .header { padding: 36px 48px 18px; border-bottom: 1px solid #1e1e2e; display: flex; justify-content: space-between; align-items: center; }
+  .header-left .label { font-size: 11px; letter-spacing: 0.15em; color: #10b981; text-transform: uppercase; margin-bottom: 6px; }
+  .header-left h1 { font-size: 24px; font-weight: 600; color: #fff; }
+  .step-badge { background: #111118; border: 1px solid #1e1e30; padding: 6px 14px; border-radius: 20px; font-size: 11px; color: #666; }
+
+  .content { padding: 36px 48px; }
+
+  /* ALERT */
+  .alert {
+    background: linear-gradient(135deg, #1a0a0a, #200e0e);
+    border: 1px solid #7f1d1d;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .alert-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+  .alert-title { font-size: 16px; font-weight: 700; color: #fca5a5; margin-bottom: 8px; }
+  .alert-body { font-size: 13px; color: #a0a0a0; line-height: 1.7; }
+  .alert-body strong { color: #fca5a5; }
+
+  /* ARCHITECTURE DIAGRAM */
+  .arch-section { margin-bottom: 36px; }
+  .section-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; margin-bottom: 8px; }
+  .section-title { font-size: 17px; font-weight: 600; color: #fff; margin-bottom: 20px; }
+
+  .arch-diagram {
+    background: #0d0d18;
+    border: 1px solid #1e1e30;
+    border-radius: 14px;
+    padding: 28px 32px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  .arch-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 12px; }
+  .arch-box {
+    padding: 8px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .arch-box.neuform { background: #1e1b4b; color: #a5b4fc; border: 1px solid #312e81; }
+  .arch-box.pencil { background: #451a03; color: #fcd34d; border: 1px solid #78350f; }
+  .arch-box.stitch { background: #0c1a3d; color: #93c5fd; border: 1px solid #1e3a8a; }
+  .arch-box.onlook { background: #052e16; color: #6ee7b7; border: 1px solid #064e3b; }
+  .arch-box.code { background: #1a1a1a; color: #d1d5db; border: 1px solid #2d2d2d; }
+  .arch-box.warning { background: #1c1207; color: #fbbf24; border: 1px solid #92400e; }
+  .arch-box.gray { background: #111; color: #666; border: 1px solid #1e1e1e; }
+  .arch-arrow { color: #333; font-size: 14px; }
+  .arch-label { font-size: 10px; color: #444; letter-spacing: 0.08em; text-transform: uppercase; }
+  .arch-separator { border-top: 1px solid #1a1a2e; margin: 16px 0; }
+
+  /* COMPARISON TABLE */
+  .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px; }
+
+  .compare-card {
+    background: #111118;
+    border: 1px solid #1e1e30;
+    border-radius: 12px;
+    padding: 22px 24px;
+  }
+  .compare-card.web { border-top: 3px solid #3b82f6; }
+  .compare-card.ios { border-top: 3px solid #8b5cf6; }
+
+  .compare-header { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .compare-sub { font-size: 11px; color: #555; margin-bottom: 16px; }
+
+  .compare-item { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+  .compare-icon { font-size: 12px; flex-shrink: 0; margin-top: 2px; }
+  .compare-text { font-size: 12px; color: #a0a0c0; line-height: 1.5; }
+
+  /* OPTIONS */
+  .options-section { margin-top: 32px; }
+  .options { display: flex; gap: 16px; }
+  .option {
+    flex: 1;
+    background: #111118;
+    border: 1px solid #1e1e30;
+    border-radius: 12px;
+    padding: 22px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .option:hover { border-color: #3d3d6e; background: #13131f; }
+  .option.selected { border-color: #6366f1; background: #12121f; }
+  .option-letter { width: 28px; height: 28px; border-radius: 8px; background: #1e1e30; color: #6366f1; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+  .option-title { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  .option-desc { font-size: 12px; color: #888; line-height: 1.6; }
+  .option-tag { font-size: 10px; color: #6366f1; margin-top: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+</style>
+<script>
+function toggleSelect(el) {
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  const choice = el.dataset.choice;
+  if (window.__onlookCompanion) window.__onlookCompanion.select(choice, el.querySelector('.option-title').textContent);
+}
+</script>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="label">Onlook — Achado Crítico da Pesquisa</div>
+    <h1>Constraint importante: Onlook é Web-only</h1>
+  </div>
+  <div class="step-badge">Passo 2 · Clarificação de Arquitetura</div>
+</div>
+
+<div class="content">
+
+  <div class="alert">
+    <div class="alert-icon">⚠️</div>
+    <div>
+      <div class="alert-title">Onlook suporta APENAS Next.js + TailwindCSS — não SwiftUI</div>
+      <div class="alert-body">
+        O subagente confirmou: o README do GitHub lista "Support non-NextJS projects" e "Support non-Tailwind projects" como funcionalidades <strong>futuras, ainda não implementadas</strong>.
+        Hoje, edição visual → código funciona exclusivamente em projetos Next.js com Tailwind, rodando em web containers (CodeSandbox SDK).
+        <br><br>
+        Isso cria um ponto de decisão: o workflow de "edição visual diretamente no código" precisa ser adaptado para SwiftUI de outra forma — ou o app começa como web e migra depois.
+      </div>
+    </div>
+  </div>
+
+  <!-- COMO O ONLOOK FUNCIONA POR DENTRO -->
+  <div class="arch-section">
+    <div class="section-label">Arquitetura interna do Onlook (confirmada)</div>
+    <div class="section-title">Como a magia do "visual → código" funciona</div>
+    <div class="arch-diagram">
+      <div class="arch-row">
+        <span class="arch-label">01</span>
+        <div class="arch-box code">Projeto Next.js/Tailwind</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box onlook">Carregado em Web Container</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box onlook">Serve via iFrame</div>
+      </div>
+      <div class="arch-separator"></div>
+      <div class="arch-row">
+        <span class="arch-label">02</span>
+        <div class="arch-box onlook">Instrumentação em Build-time</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box code">data-onlook-id em cada elemento DOM</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box onlook">Sourcemap: DOM → arquivo:linha</div>
+      </div>
+      <div class="arch-separator"></div>
+      <div class="arch-row">
+        <span class="arch-label">03</span>
+        <div class="arch-box onlook">Usuário edita visualmente</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box onlook">DOM muda primeiro (CSS layer)</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box code">Parse AST + Inject Style → Write file</div>
+      </div>
+      <div class="arch-separator"></div>
+      <div class="arch-row">
+        <span class="arch-label">04</span>
+        <div class="arch-box onlook">Mudança serializada como "Action"</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box onlook">Armazenável, reversível, colaborável</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box onlook">AI Chat com acesso direto ao código</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEB vs iOS COMPARISON -->
+  <div class="section-label">Implicação para o projeto</div>
+  <div class="section-title">Web-first vs iOS-native: o que muda no workflow</div>
+  <div class="comparison-grid">
+
+    <div class="compare-card web">
+      <div class="compare-header">🌐 Abordagem Web-first (Next.js)</div>
+      <div class="compare-sub">Onlook funciona nativamente nesse cenário</div>
+      <div class="compare-item">
+        <div class="compare-icon">✅</div>
+        <div class="compare-text">Onlook, Pencil, Stitch, Neuform funcionam 100% sem adaptação</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-icon">✅</div>
+        <div class="compare-text">Deploy instantâneo, sem App Store, iterações em horas</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-icon">✅</div>
+        <div class="compare-text">Design + código no mesmo ambiente de edição visual</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-icon">⚠️</div>
+        <div class="compare-text">Experiência mobile limitada (PWA vs app nativo)</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-icon">⚠️</div>
+        <div class="compare-text">SwiftUI animations e gestos nativos não disponíveis</div>
+      </div>
+    </div>
+
+    <div class="compare-card ios">
+      <div class="compare-header">📱 Abordagem iOS-native (SwiftUI)</div>
+      <div class="compare-sub">Onlook precisa ser substituído/adaptado</div>
+      <div class="compare-item">
+        <div class="compare-icon">✅</div>
+        <div class="compare-text">Experiência nativa completa: gestos, haptics, widgets, Siri</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-icon">✅</div>
+        <div class="compare-text">SwiftUI Animations nativas (referências dos vídeos baixados)</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-icon">✅</div>
+        <div class="compare-text">Distribuição via App Store (monetização, credibilidade)</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-icon">🔴</div>
+        <div class="compare-text">Onlook não suporta — precisa usar Xcode Previews como equivalente</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-icon">🔴</div>
+        <div class="compare-text">Loop de prototipagem mais lento (compile → preview → ajusta)</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- OPTIONS -->
+  <div class="options-section">
+    <div class="section-label">Ponto de decisão</div>
+    <div class="section-title">Qual caminho tomar para o app de residência?</div>
+    <div class="options">
+
+      <div class="option" data-choice="a" onclick="toggleSelect(this)">
+        <div class="option-letter">A</div>
+        <div class="option-title">Web-first → iOS depois</div>
+        <div class="option-desc">Começa como Progressive Web App (Next.js) usando todas as 4 ferramentas. Quando o produto valida, migra partes críticas para SwiftUI nativo.</div>
+        <div class="option-tag">Menor atrito inicial · Onlook funciona 100%</div>
+      </div>
+
+      <div class="option" data-choice="b" onclick="toggleSelect(this)">
+        <div class="option-letter">B</div>
+        <div class="option-title">iOS-native com workflow adaptado</div>
+        <div class="option-desc">SwiftUI como alvo, mas usa Neuform + Stitch + Pencil para geração e Xcode Previews como substituto do Onlook. Onlook fica como referência conceitual apenas.</div>
+        <div class="option-tag">Produto final melhor · Loop mais lento</div>
+      </div>
+
+      <div class="option" data-choice="c" onclick="toggleSelect(this)">
+        <div class="option-letter">C</div>
+        <div class="option-title">Paralelo: Web (protótipo rápido) + iOS (nativo)</div>
+        <div class="option-desc">Dois repos em paralelo. Web valida UX rapidamente com as 4 ferramentas. iOS implementa as telas validadas. Design system compartilhado (tokens em DESIGN.md).</div>
+        <div class="option-tag">Máxima velocidade · Maior esforço de manutenção</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

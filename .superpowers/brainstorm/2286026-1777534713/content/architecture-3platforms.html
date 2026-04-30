@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Arquitetura 3 Plataformas</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #070710; color: #e8e8f0; font-family: 'SF Pro Display', -apple-system, sans-serif; }
+
+  .header { padding: 36px 48px 20px; border-bottom: 1px solid #15152a; display:flex; justify-content:space-between; align-items:center; }
+  .header-left .label { font-size: 11px; letter-spacing: 0.15em; color: #818cf8; text-transform: uppercase; margin-bottom: 6px; }
+  .header h1 { font-size: 26px; font-weight: 700; color: #fff; }
+  .header .sub { font-size: 13px; color: #555; margin-top: 4px; }
+  .confirmed { background: #052e16; color: #34d399; font-size: 11px; padding: 6px 14px; border-radius: 20px; font-weight: 600; }
+
+  .content { padding: 36px 48px; }
+
+  /* THE BIG DIAGRAM */
+  .diagram { margin-bottom: 40px; }
+  .diag-title { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 20px; text-align: center; }
+
+  /* CENTER: DESIGN.md hub */
+  .hub-section { display: flex; flex-direction: column; align-items: center; margin-bottom: 24px; }
+  .hub-box {
+    background: linear-gradient(135deg, #1e1b4b, #312e81);
+    border: 2px solid #6366f1;
+    border-radius: 16px;
+    padding: 20px 40px;
+    text-align: center;
+    box-shadow: 0 0 40px #6366f110;
+  }
+  .hub-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #a5b4fc; margin-bottom: 4px; }
+  .hub-name { font-size: 20px; font-weight: 800; color: #fff; }
+  .hub-sub { font-size: 12px; color: #818cf8; margin-top: 4px; }
+
+  .hub-tools { display: flex; gap: 8px; margin-top: 12px; justify-content: center; }
+  .hub-tool { background: #1e1b4b; color: #a5b4fc; font-size: 10px; padding: 3px 10px; border-radius: 10px; }
+
+  .connector { text-align: center; color: #2d2d5e; font-size: 24px; line-height: 1; margin: 8px 0; }
+
+  /* 3 PLATFORM COLUMNS */
+  .platforms { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+
+  .platform {
+    background: #0d0d18;
+    border: 1px solid #1a1a30;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .platform-header {
+    padding: 18px 20px 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .platform.web .platform-header { background: linear-gradient(135deg, #0c1a3d, #0d1f4a); border-bottom: 1px solid #1e3a8a; }
+  .platform.ios .platform-header { background: linear-gradient(135deg, #1a0533, #1f0640); border-bottom: 1px solid #4c1d95; }
+  .platform.mac .platform-header { background: linear-gradient(135deg, #0a1f0a, #0d240d); border-bottom: 1px solid #064e3b; }
+
+  .platform-icon { font-size: 24px; }
+  .platform-name { font-size: 15px; font-weight: 700; color: #fff; }
+  .platform-sub { font-size: 11px; color: #555; margin-top: 1px; }
+
+  .platform-body { padding: 18px 20px; }
+
+  .tool-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+  .tool-row:last-child { margin-bottom: 0; }
+  .tool-num { font-size: 10px; color: #2d2d5e; font-weight: 700; flex-shrink: 0; width: 14px; }
+  .tool-info {}
+  .tool-info .name { font-size: 12px; font-weight: 600; color: #e0e0f0; }
+  .tool-info .desc { font-size: 11px; color: #666; margin-top: 2px; line-height: 1.4; }
+  .tool-info .badge { display: inline-block; font-size: 9px; padding: 1px 6px; border-radius: 8px; margin-top: 4px; }
+  .platform.web .tool-info .badge { background: #0c1a3d; color: #93c5fd; }
+  .platform.ios .tool-info .badge { background: #1a0533; color: #c4b5fd; }
+  .platform.mac .tool-info .badge { background: #0a1f0a; color: #6ee7b7; }
+
+  .platform-footer {
+    padding: 12px 20px;
+    border-top: 1px solid #111;
+    font-size: 11px; color: #555;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .output-tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; }
+  .platform.web .output-tag { background: #0c1a3d; color: #93c5fd; }
+  .platform.ios .output-tag { background: #1a0533; color: #c4b5fd; }
+  .platform.mac .output-tag { background: #0a1f0a; color: #6ee7b7; }
+
+  /* MERMAID-STYLE FLOW */
+  .flow-section { background: #0d0d18; border: 1px solid #1a1a30; border-radius: 16px; padding: 28px; margin-bottom: 32px; }
+  .flow-title { font-size: 13px; font-weight: 600; color: #888; text-align: center; margin-bottom: 24px; letter-spacing: 0.05em; }
+  .flow-steps { display: flex; align-items: stretch; position: relative; }
+  .flow-step {
+    flex: 1;
+    text-align: center;
+    padding: 16px 10px;
+    position: relative;
+  }
+  .flow-step::after {
+    content: '→';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #2d2d5e;
+    font-size: 18px;
+  }
+  .flow-step:last-child::after { display: none; }
+  .step-icon { font-size: 20px; margin-bottom: 8px; }
+  .step-name { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .step-tool { font-size: 10px; color: #555; margin-bottom: 6px; }
+  .step-badge-group { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
+  .step-b { font-size: 9px; padding: 2px 6px; border-radius: 8px; }
+  .step-b.web { background: #0c1a3d; color: #93c5fd; }
+  .step-b.ios { background: #1a0533; color: #c4b5fd; }
+  .step-b.mac { background: #0a1f0a; color: #6ee7b7; }
+  .step-b.all { background: #1e1b4b; color: #a5b4fc; }
+
+  /* MERMAID TEXT */
+  .mermaid-section { margin-bottom: 32px; }
+  .mermaid-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; margin-bottom: 12px; }
+  .mermaid-box {
+    background: #0d0d18; border: 1px solid #1a1a30;
+    border-radius: 12px; padding: 24px 28px;
+    font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px;
+    color: #6366f1; line-height: 1.8;
+  }
+  .mermaid-box .c { color: #444; }
+  .mermaid-box .n { color: #a5b4fc; }
+  .mermaid-box .s { color: #93c5fd; }
+  .mermaid-box .p { color: #fcd34d; }
+  .mermaid-box .o { color: #6ee7b7; }
+  .mermaid-box .x { color: #c4b5fd; }
+  .mermaid-box .arrow { color: #2d2d5e; }
+  .mermaid-box .kw { color: #818cf8; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="label">Arquitetura Final Confirmada</div>
+    <h1>Web · iOS · macOS — simultâneo</h1>
+    <div class="sub">DESIGN.md como fonte única · Ferramentas web para prototipagem · SwiftUI para nativo</div>
+  </div>
+  <div class="confirmed">✓ Escopo definido</div>
+</div>
+
+<div class="content">
+
+  <!-- HUB -->
+  <div class="hub-section">
+    <div class="hub-box">
+      <div class="hub-label">Fonte Única de Verdade</div>
+      <div class="hub-name">DESIGN.md</div>
+      <div class="hub-sub">Tokens · Identidade visual · Regras de componentes · Contexto do produto</div>
+      <div class="hub-tools">
+        <span class="hub-tool">via Neuform</span>
+        <span class="hub-tool">adotado pelo Stitch 2.0</span>
+        <span class="hub-tool">compatível com Pencil</span>
+        <span class="hub-tool">alimenta Claude Code</span>
+      </div>
+    </div>
+    <div class="connector">↓ &nbsp; ↓ &nbsp; ↓</div>
+  </div>
+
+  <!-- 3 PLATAFORMAS -->
+  <div class="platforms">
+
+    <!-- WEB -->
+    <div class="platform web">
+      <div class="platform-header">
+        <div class="platform-icon">🌐</div>
+        <div>
+          <div class="platform-name">Web (Next.js · PWA)</div>
+          <div class="platform-sub">Prototipagem + entrega web</div>
+        </div>
+      </div>
+      <div class="platform-body">
+        <div class="tool-row">
+          <div class="tool-num">01</div>
+          <div class="tool-info">
+            <div class="name">Neuform — Direção visual</div>
+            <div class="desc">Gera variações de tela com DESIGN.md como contexto. 593 templates remixáveis.</div>
+            <span class="badge">Prompt → HTML/CSS</span>
+          </div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-num">02</div>
+          <div class="tool-info">
+            <div class="name">Stitch — Image→UI</div>
+            <div class="desc">Screenshots dos Dribbble/Mobbin refs + DESIGN.md → tela gerada pelo Gemini.</div>
+            <span class="badge">MCP server para IDEs</span>
+          </div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-num">03</div>
+          <div class="tool-info">
+            <div class="name">Pencil — Canvas no IDE</div>
+            <div class="desc">Design no VS Code/Cursor. .pen files no Git. MCP bidirecional com Claude.</div>
+            <span class="badge">Claude Code ↔ Canvas</span>
+          </div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-num">04</div>
+          <div class="tool-info">
+            <div class="name">Onlook — Visual edit</div>
+            <div class="desc">Edição visual direta no Next.js. DOM → AST → código. Sem handoff.</div>
+            <span class="badge">Self-hosted (Apache 2.0)</span>
+          </div>
+        </div>
+      </div>
+      <div class="platform-footer">
+        <span>Next.js · TailwindCSS · React</span>
+        <span class="output-tag">PWA instalável</span>
+      </div>
+    </div>
+
+    <!-- iOS -->
+    <div class="platform ios">
+      <div class="platform-header">
+        <div class="platform-icon">📱</div>
+        <div>
+          <div class="platform-name">iOS (SwiftUI)</div>
+          <div class="platform-sub">App nativo iPhone · App Store</div>
+        </div>
+      </div>
+      <div class="platform-body">
+        <div class="tool-row">
+          <div class="tool-num">01</div>
+          <div class="tool-info">
+            <div class="name">DESIGN.md → SwiftUI tokens</div>
+            <div class="desc">Claude Code lê o DESIGN.md e gera extension de Color, Font e Spacing para SwiftUI.</div>
+            <span class="badge">Tokens auto-gerados</span>
+          </div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-num">02</div>
+          <div class="tool-info">
+            <div class="name">Pencil web prototype → SwiftUI</div>
+            <div class="desc">Tela validada no Pencil (web) é passada ao Claude Code que gera o componente SwiftUI equivalente.</div>
+            <span class="badge">Claude Code prompt</span>
+          </div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-num">03</div>
+          <div class="tool-info">
+            <div class="name">Xcode Previews como "Onlook"</div>
+            <div class="desc">Preview instantâneo por device. Multi-device grid. Substitui o visual editing do Onlook.</div>
+            <span class="badge">SwiftUI Preview Macros</span>
+          </div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-num">04</div>
+          <div class="tool-info">
+            <div class="name">SwiftUI Animations</div>
+            <div class="desc">Particle burst, tab bar animado, Lottie — refs nos 9 vídeos já baixados.</div>
+            <span class="badge">Videos curados no repo</span>
+          </div>
+        </div>
+      </div>
+      <div class="platform-footer">
+        <span>SwiftUI · Xcode · Swift Package</span>
+        <span class="output-tag">App Store nativo</span>
+      </div>
+    </div>
+
+    <!-- macOS -->
+    <div class="platform mac">
+      <div class="platform-header">
+        <div class="platform-icon">💻</div>
+        <div>
+          <div class="platform-name">macOS (SwiftUI Multiplatform)</div>
+          <div class="platform-sub">Desktop nativo · Mesma base iOS</div>
+        </div>
+      </div>
+      <div class="platform-body">
+        <div class="tool-row">
+          <div class="tool-num">01</div>
+          <div class="tool-info">
+            <div class="name">SwiftUI multiplatform target</div>
+            <div class="desc">90% do código Swift é compartilhado com iOS. Adapta sidebar, toolbar e janelas para macOS.</div>
+            <span class="badge">#if os(macOS)</span>
+          </div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-num">02</div>
+          <div class="tool-info">
+            <div class="name">Pencil.dev como canvas macOS</div>
+            <div class="desc">Pencil roda em VS Code no Mac. Mesma extensão usada para web pode gerar layouts macOS.</div>
+            <span class="badge">VS Code extension</span>
+          </div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-num">03</div>
+          <div class="tool-info">
+            <div class="name">Mentor dashboard expandido</div>
+            <div class="desc">macOS permite um dashboard mais rico: split view, menu bar, notificações do sistema, widgets.</div>
+            <span class="badge">AppKit bridges</span>
+          </div>
+        </div>
+        <div class="tool-row">
+          <div class="tool-num">04</div>
+          <div class="tool-info">
+            <div class="name">Catalyst / Mac Designed for iPad</div>
+            <div class="desc">Opção alternativa: derivar macOS automaticamente do iOS build com Mac Catalyst.</div>
+            <span class="badge">Zero esforço extra</span>
+          </div>
+        </div>
+      </div>
+      <div class="platform-footer">
+        <span>SwiftUI · AppKit · Catalyst</span>
+        <span class="output-tag">Mac App Store</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FLUXO 5 PASSOS -->
+  <div class="flow-section">
+    <div class="flow-title">FLUXO DO SISTEMA — do primeiro prompt às 3 plataformas</div>
+    <div class="flow-steps">
+
+      <div class="flow-step">
+        <div class="step-icon">📄</div>
+        <div class="step-name">DESIGN.md</div>
+        <div class="step-tool">Neuform</div>
+        <div class="step-badge-group">
+          <span class="step-b all">todos os outputs</span>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-icon">🖼</div>
+        <div class="step-name">Referência Visual</div>
+        <div class="step-tool">Stitch + screenshots</div>
+        <div class="step-badge-group">
+          <span class="step-b web">web</span>
+          <span class="step-b ios">iOS ref</span>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-icon">✏️</div>
+        <div class="step-name">Canvas → Código</div>
+        <div class="step-tool">Pencil + Claude MCP</div>
+        <div class="step-badge-group">
+          <span class="step-b web">React/Tailwind</span>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-icon">👁</div>
+        <div class="step-name">Visual Edit</div>
+        <div class="step-tool">Onlook (web) / Xcode (nativo)</div>
+        <div class="step-badge-group">
+          <span class="step-b web">Next.js</span>
+          <span class="step-b ios">SwiftUI</span>
+          <span class="step-b mac">macOS</span>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-icon">🚀</div>
+        <div class="step-name">Produção</div>
+        <div class="step-tool">Deploy / App Stores</div>
+        <div class="step-badge-group">
+          <span class="step-b web">Vercel</span>
+          <span class="step-b ios">App Store</span>
+          <span class="step-b mac">Mac App Store</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MERMAID DIAGRAM -->
+  <div class="mermaid-section">
+    <div class="mermaid-label">Diagrama Mermaid — para o spec doc</div>
+    <div class="mermaid-box">
+<span class="kw">graph TD</span><br>
+&nbsp;&nbsp;<span class="n">DM[DESIGN.md · Neuform]</span><br>
+&nbsp;&nbsp;<span class="n">DM</span> <span class="arrow">--&gt;</span> <span class="s">ST[Stitch · Image→UI · Gemini]</span><br>
+&nbsp;&nbsp;<span class="n">DM</span> <span class="arrow">--&gt;</span> <span class="p">PE[Pencil · Canvas no IDE]</span><br>
+&nbsp;&nbsp;<span class="n">DM</span> <span class="arrow">--&gt;</span> <span class="x">CC[Claude Code · MCP Hub]</span><br>
+<br>
+&nbsp;&nbsp;<span class="s">ST</span> <span class="arrow">--&gt;</span> <span class="p">PE</span><br>
+&nbsp;&nbsp;<span class="p">PE</span> <span class="arrow">--&gt;|MCP bidirecional|</span> <span class="x">CC</span><br>
+<br>
+&nbsp;&nbsp;<span class="x">CC</span> <span class="arrow">--&gt;</span> <span class="s">WEB[Web · Next.js · Onlook]</span><br>
+&nbsp;&nbsp;<span class="x">CC</span> <span class="arrow">--&gt;</span> <span class="x">IOS[iOS · SwiftUI · Xcode]</span><br>
+&nbsp;&nbsp;<span class="x">CC</span> <span class="arrow">--&gt;</span> <span class="o">MAC[macOS · SwiftUI Multiplatform]</span><br>
+<br>
+&nbsp;&nbsp;<span class="s">WEB</span> <span class="arrow">--&gt;</span> <span class="s">V[Vercel · PWA]</span><br>
+&nbsp;&nbsp;<span class="x">IOS</span> <span class="arrow">--&gt;</span> <span class="x">AS[App Store]</span><br>
+&nbsp;&nbsp;<span class="o">MAC</span> <span class="arrow">--&gt;</span> <span class="o">MAS[Mac App Store]</span><br>
+<br>
+&nbsp;&nbsp;<span class="c">style DM fill:#312e81,stroke:#6366f1</span><br>
+&nbsp;&nbsp;<span class="c">style CC fill:#3b0764,stroke:#7c3aed</span><br>
+&nbsp;&nbsp;<span class="c">style WEB fill:#1e3a8a,stroke:#3b82f6</span><br>
+&nbsp;&nbsp;<span class="c">style IOS fill:#4c1d95,stroke:#8b5cf6</span><br>
+&nbsp;&nbsp;<span class="c">style MAC fill:#064e3b,stroke:#10b981</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

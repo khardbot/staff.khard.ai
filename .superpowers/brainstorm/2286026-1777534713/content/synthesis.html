@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Síntese da Pesquisa — 4 Ferramentas</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #e8e8f0; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; }
+
+  .header { padding: 36px 48px 18px; border-bottom: 1px solid #1e1e2e; }
+  .label { font-size: 11px; letter-spacing: 0.15em; color: #f59e0b; text-transform: uppercase; margin-bottom: 6px; }
+  h1 { font-size: 24px; font-weight: 600; color: #fff; }
+  .sub { font-size: 13px; color: #666; margin-top: 4px; }
+
+  .content { padding: 36px 48px; }
+
+  /* INSIGHT BOX */
+  .insight {
+    background: linear-gradient(135deg, #1c1207, #1a1000);
+    border: 1px solid #92400e;
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-bottom: 32px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .insight-icon { font-size: 24px; flex-shrink: 0; }
+  .insight-title { font-size: 14px; font-weight: 700; color: #fbbf24; margin-bottom: 6px; }
+  .insight-body { font-size: 12px; color: #a0a0a0; line-height: 1.7; }
+  .insight-body strong { color: #fbbf24; }
+
+  /* TOOLS MATRIX */
+  .matrix { width: 100%; border-collapse: collapse; margin-bottom: 36px; }
+  .matrix th {
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #555; padding: 10px 14px; border-bottom: 1px solid #1e1e2e;
+    text-align: left; font-weight: 500;
+  }
+  .matrix td { padding: 14px; border-bottom: 1px solid #111; font-size: 12px; vertical-align: top; }
+  .matrix tr:hover td { background: #0f0f18; }
+  .matrix tr td:first-child { font-weight: 600; color: #fff; }
+
+  .badge {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    padding: 2px 8px; border-radius: 10px; margin: 2px 2px 2px 0;
+    letter-spacing: 0.04em;
+  }
+  .badge.green { background: #052e16; color: #6ee7b7; }
+  .badge.red { background: #450a0a; color: #fca5a5; }
+  .badge.yellow { background: #451a03; color: #fcd34d; }
+  .badge.blue { background: #0c1a3d; color: #93c5fd; }
+  .badge.purple { background: #1e1b4b; color: #a5b4fc; }
+
+  /* CONVERGÊNCIAS */
+  .convergence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px; }
+  .conv-card { background: #111118; border: 1px solid #1e1e30; border-radius: 12px; padding: 20px; }
+  .conv-title { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 8px; display: flex; gap: 8px; align-items: center; }
+  .conv-body { font-size: 12px; color: #888; line-height: 1.6; }
+  .conv-tools { margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* ARCHITECTURE OPTIONS */
+  .arch-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .arch-option {
+    background: #111118; border: 1px solid #1e1e30;
+    border-radius: 12px; padding: 22px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .arch-option:hover { border-color: #3d3d6e; }
+  .arch-option.selected { border-color: #6366f1; background: #12121f; }
+  .arch-option.recommended { border-color: #10b981 !important; }
+
+  .arch-num { font-size: 28px; font-weight: 800; color: #1e1e30; margin-bottom: 12px; }
+  .arch-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .arch-desc { font-size: 12px; color: #888; line-height: 1.6; margin-bottom: 14px; }
+  .arch-stack { margin-top: 14px; }
+  .arch-stack-label { font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .arch-tool { font-size: 11px; color: #a0a0c0; padding: 4px 0; display: flex; gap: 8px; }
+  .arch-tool::before { content: '›'; color: #333; }
+  .rec-tag { background: #052e16; color: #34d399; font-size: 10px; padding: 3px 10px; border-radius: 10px; display: inline-block; margin-top: 10px; font-weight: 600; }
+  .warn-tag { background: #1c1207; color: #fbbf24; font-size: 10px; padding: 3px 10px; border-radius: 10px; display: inline-block; margin-top: 10px; font-weight: 600; }
+
+  /* MERMAID-STYLE PIPELINE VISUAL */
+  .pipeline { background: #0d0d18; border: 1px solid #1e1e30; border-radius: 14px; padding: 28px 24px; margin-bottom: 32px; }
+  .pipeline-title { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 20px; text-align: center; }
+  .pipe-row { display: flex; align-items: center; gap: 8px; justify-content: center; flex-wrap: nowrap; }
+  .pipe-node {
+    flex-shrink: 0;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    min-width: 100px;
+  }
+  .pipe-node small { display: block; font-size: 9px; font-weight: 400; margin-top: 3px; opacity: 0.7; }
+  .pipe-node.n { background: #1e1b4b; color: #a5b4fc; border: 1px solid #312e81; }
+  .pipe-node.s { background: #0c1a3d; color: #93c5fd; border: 1px solid #1e3a8a; }
+  .pipe-node.p { background: #451a03; color: #fcd34d; border: 1px solid #78350f; }
+  .pipe-node.o { background: #052e16; color: #6ee7b7; border: 1px solid #064e3b; }
+  .pipe-node.c { background: #1a0533; color: #c4b5fd; border: 1px solid #4c1d95; }
+  .pipe-node.x { background: #1a1a1a; color: #d1d5db; border: 1px solid #2d2d2d; }
+  .pipe-arr { color: #2d2d5e; font-size: 20px; flex-shrink: 0; }
+
+  hr.divider { border: none; border-top: 1px solid #1e1e2e; margin: 32px 0; }
+</style>
+<script>
+function toggleSelect(el) {
+  document.querySelectorAll('.arch-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  const choice = el.dataset.choice;
+  if (window.__onlookCompanion) window.__onlookCompanion.select(choice, el.querySelector('.arch-title').textContent);
+}
+</script>
+</head>
+<body>
+
+<div class="header">
+  <div class="label">Pesquisa Concluída — Síntese das 4 Ferramentas</div>
+  <h1>Tudo que descobrimos + 3 arquiteturas possíveis</h1>
+  <div class="sub">2 subagentes pesquisaram Onlook, Stitch e Pencil em profundidade. Resultado: escolha crítica pela frente.</div>
+</div>
+
+<div class="content">
+
+  <div class="insight">
+    <div class="insight-icon">🔍</div>
+    <div>
+      <div class="insight-title">Achado decisivo: nenhuma das 4 ferramentas exporta SwiftUI</div>
+      <div class="insight-body">
+        <strong>Neuform → HTML/CSS</strong> &nbsp;·&nbsp;
+        <strong>Stitch → HTML+Tailwind</strong> &nbsp;·&nbsp;
+        <strong>Onlook → Next.js+Tailwind</strong> &nbsp;·&nbsp;
+        <strong>Pencil → React+Tailwind</strong><br><br>
+        Isso não é um bloqueio — é um ponto de design. A fusão das 4 ferramentas forma um pipeline de prototipagem web de altíssima velocidade. Para o app iOS, há duas saídas: usar esse pipeline como <em>workbench de validação de UX</em> antes do SwiftUI, ou pivotar a entrega para web (PWA) usando essa stack diretamente.
+      </div>
+    </div>
+  </div>
+
+  <!-- MATRIX COMPARATIVA -->
+  <table class="matrix">
+    <thead>
+      <tr>
+        <th>Ferramenta</th>
+        <th>Papel no sistema</th>
+        <th>Output de código</th>
+        <th>Modelo AI</th>
+        <th>Status</th>
+        <th>Custo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>⬡ Neuform</td>
+        <td>DESIGN.md · Templates · Prompt Skills · Remix de direção visual</td>
+        <td><span class="badge green">HTML</span><span class="badge green">DESIGN.md</span><span class="badge blue">Figma</span></td>
+        <td>Proprietário</td>
+        <td><span class="badge green">GA</span></td>
+        <td>Free → $100/mo</td>
+      </tr>
+      <tr>
+        <td>🧵 Stitch</td>
+        <td>Image→UI · Voice canvas · DESIGN.md · MCP para IDEs</td>
+        <td><span class="badge green">HTML+Tailwind</span><span class="badge yellow">React (roadmap)</span></td>
+        <td>Gemini 2.5</td>
+        <td><span class="badge yellow">Beta</span></td>
+        <td>Gratuito (Google Labs)</td>
+      </tr>
+      <tr>
+        <td>👁 Onlook</td>
+        <td>Edição visual → código · Sem handoff · Colaboração em codebase</td>
+        <td><span class="badge green">Next.js</span><span class="badge green">Tailwind</span><span class="badge red">não SwiftUI</span></td>
+        <td>Múltiplos</td>
+        <td><span class="badge yellow">Early Access</span></td>
+        <td>Teams (custom) · Self-host free</td>
+      </tr>
+      <tr>
+        <td>✏️ Pencil</td>
+        <td>Canvas no IDE · MCP bidirecional · .pen files no Git · Claude-native</td>
+        <td><span class="badge green">React+Tailwind</span><span class="badge green">HTML/CSS</span><span class="badge red">não SwiftUI</span></td>
+        <td>Claude (MCP)</td>
+        <td><span class="badge yellow">Early Access</span></td>
+        <td>Grátis (Claude API à parte)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- CONVERGÊNCIAS -->
+  <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#555;margin-bottom:16px;">Convergências que emergem da pesquisa</div>
+  <div class="convergence-grid" style="margin-bottom:32px;">
+
+    <div class="conv-card">
+      <div class="conv-title">⚡ DESIGN.md é o protocolo de convergência</div>
+      <div class="conv-body">Neuform criou o conceito, Stitch 2.0 o adotou nativamente, e Pencil usa o mesmo princípio com .pen files. Os 3 compartilham a ideia de um "contexto de design portátil" que alimenta a AI em qualquer gerador.</div>
+      <div class="conv-tools">
+        <span class="badge purple">Neuform</span>
+        <span class="badge blue">Stitch 2.0</span>
+        <span class="badge yellow">Pencil</span>
+      </div>
+    </div>
+
+    <div class="conv-card">
+      <div class="conv-title">🔗 MCP conecta tudo ao Claude Code (você)</div>
+      <div class="conv-body">Stitch tem MCP server para IDEs. Pencil é MCP bidirecional nativo com Claude. Isso significa que eu (Claude Code) posso ler o canvas do Pencil E escrever de volta — e consumir o design do Stitch — tudo via protocolo padrão.</div>
+      <div class="conv-tools">
+        <span class="badge blue">Stitch MCP</span>
+        <span class="badge yellow">Pencil MCP bidirecional</span>
+        <span class="badge purple">Claude Code</span>
+      </div>
+    </div>
+
+    <div class="conv-card">
+      <div class="conv-title">🎨 Onlook = padrão arquitetural, não dependência</div>
+      <div class="conv-body">Mesmo sem suportar SwiftUI, a arquitetura do Onlook (instrumentação em build-time + sourcemaps DOM→código + AST write-back) pode ser replicada para SwiftUI com Xcode Previews + Swift macros.</div>
+      <div class="conv-tools">
+        <span class="badge green">Conceito Onlook</span>
+        <span class="badge purple">Xcode Previews</span>
+        <span class="badge purple">Swift Macros</span>
+      </div>
+    </div>
+
+    <div class="conv-card">
+      <div class="conv-title">🚀 YC está apostando nesse espaço</div>
+      <div class="conv-body">Onlook (YC W25) e Pencil (YC-backed) foram acelerados no mesmo ciclo. Esse é o campo mais quente de tooling de AI para frontend. O timing para construir um workflow proprietário nesse espaço é agora.</div>
+      <div class="conv-tools">
+        <span class="badge green">Onlook YC W25</span>
+        <span class="badge yellow">Pencil YC</span>
+        <span class="badge blue">Stitch (Google)</span>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+  <!-- PIPELINE VISUAL -->
+  <div class="pipeline">
+    <div class="pipeline-title">Pipeline Recomendado — Fusão das 4 + Claude Code</div>
+    <div class="pipe-row">
+      <div class="pipe-node n">DESIGN.md<small>Neuform</small></div>
+      <div class="pipe-arr">→</div>
+      <div class="pipe-node s">Image→UI<small>Stitch</small></div>
+      <div class="pipe-arr">→</div>
+      <div class="pipe-node p">Canvas<small>Pencil IDE</small></div>
+      <div class="pipe-arr">→</div>
+      <div class="pipe-node o">Visual Edit<small>Onlook</small></div>
+      <div class="pipe-arr">→</div>
+      <div class="pipe-node c">Claude Code<small>MCP ↔ Pencil/Stitch</small></div>
+      <div class="pipe-arr">→</div>
+      <div class="pipe-node x">Produção<small>Web ou SwiftUI</small></div>
+    </div>
+  </div>
+
+  <!-- ARQUITETURAS -->
+  <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#555;margin-bottom:8px;">3 arquiteturas possíveis para o projeto</div>
+  <div style="font-size:17px;font-weight:600;color:#fff;margin-bottom:20px;">Qual caminho tomar?</div>
+
+  <div class="arch-options">
+
+    <div class="arch-option recommended" data-choice="web" onclick="toggleSelect(this)">
+      <div class="arch-num">01</div>
+      <div class="arch-title">Web-first (PWA + Next.js)</div>
+      <div class="arch-desc">Usa todas as 4 ferramentas nativamente. O app de residência roda como PWA instalável no celular. Iteração ultra-rápida sem App Store.</div>
+      <div class="arch-stack">
+        <div class="arch-stack-label">Stack</div>
+        <div class="arch-tool">Neuform → DESIGN.md do produto</div>
+        <div class="arch-tool">Stitch → Geração de telas por imagem</div>
+        <div class="arch-tool">Pencil → Canvas + código no IDE</div>
+        <div class="arch-tool">Onlook → Edição visual no Next.js</div>
+        <div class="arch-tool">Claude Code ↔ MCP Pencil</div>
+      </div>
+      <div class="rec-tag">✓ Recomendado para velocidade máxima</div>
+    </div>
+
+    <div class="arch-option" data-choice="ios" onclick="toggleSelect(this)">
+      <div class="arch-num">02</div>
+      <div class="arch-title">iOS-native (SwiftUI)</div>
+      <div class="arch-desc">Usa Neuform + Stitch como referência visual. Pencil gera o protótipo web. Claude Code traduz para SwiftUI. Onlook como padrão conceitual via Xcode Previews.</div>
+      <div class="arch-stack">
+        <div class="arch-stack-label">Stack</div>
+        <div class="arch-tool">Neuform → DESIGN.md (tokens e regras)</div>
+        <div class="arch-tool">Stitch → Geração de mockup de referência</div>
+        <div class="arch-tool">Pencil → Protótipo web validado</div>
+        <div class="arch-tool">Claude Code → SwiftUI generation</div>
+        <div class="arch-tool">Xcode Previews → "Onlook nativo"</div>
+      </div>
+      <div class="warn-tag">⚠ Loop de iteração mais lento</div>
+    </div>
+
+    <div class="arch-option" data-choice="hybrid" onclick="toggleSelect(this)">
+      <div class="arch-num">03</div>
+      <div class="arch-title">Híbrido (Web valida → iOS produz)</div>
+      <div class="arch-desc">Web valida UX com as 4 ferramentas em horas. Telas aprovadas são implementadas em SwiftUI. DESIGN.md compartilhado entre os dois ambientes.</div>
+      <div class="arch-stack">
+        <div class="arch-stack-label">Stack</div>
+        <div class="arch-tool">Neuform DESIGN.md → fonte única de tokens</div>
+        <div class="arch-tool">Stitch + Pencil → validação web rápida</div>
+        <div class="arch-tool">Onlook → polish visual no web</div>
+        <div class="arch-tool">Claude Code → SwiftUI das telas aprovadas</div>
+        <div class="arch-tool">Design system bi-plataforma</div>
+      </div>
+      <div class="warn-tag">⚠ Mais esforço · Maior qualidade final</div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>
