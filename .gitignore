@@ -1,0 +1,12 @@
+*.mp4
+*.webm
+*.mkv
+*.m4v
+*.part
+*.ytdl
+*.webp
+*.jpg
+*.jpeg
+*.png
+design-inspiration/**/*.png
+design-inspiration/**/*.jpg
